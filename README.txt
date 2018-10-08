@@ -16,7 +16,10 @@ optional arguments:
                         (for example: '25-Dec-1975 14:15:16' instead of
                         '1975-12-25T14:15:16'), pendulum is going to try to
                         parse it.
+                        
 
+  TODO: timestamp 'reverse' functionality, which converts the timestamps taken from the file(s) into ISO8601 format. 
+  TODO: creating stand-alone app from the tool with PyInstaller(?) 
 
 
 Example run:
