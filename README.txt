@@ -51,8 +51,12 @@ Then install the required packages:
 
 Assumptions: (version 1)
 
+-This tool tested with python 3.7.0 under Manjaro linux. 
+I do not know howto setup python environment under windows or mac, but I assume that it is possible to create the same environment.
+Generally:
 -This tool assuming that running environment has python3, pip3, virtualenv installed
 -This tool assuming that user can install python3 packages via pip
+
 -This tool assuming that the computer has at least few GB of free memory, because it is possible
 to feed multiple log files into the app, and each file can hold several GB of content. (Especially if the user omits the '--from' and '--to' arguments, because 
 the entire content of the files will be read into the 'stat' dictionary by line after line.
