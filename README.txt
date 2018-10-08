@@ -56,12 +56,12 @@ I do not know howto setup python environment under windows or mac, but I assume 
 Generally:
 -This tool assuming that running environment has python3, pip3, virtualenv installed
 -This tool assuming that user can install python3 packages via pip
-
 -This tool assuming that the computer has at least few GB of free memory, because it is possible
 to feed multiple log files into the app, and each file can hold several GB of content. (Especially if the user omits the '--from' and '--to' arguments, because 
 the entire content of the files will be read into the 'stat' dictionary by line after line.
 TODO: measure the size of the 'stat' with a few million entries...? (The problem is with
 sys.getsizeof(object[, default]) is: "only the memory consumption directly attributed to the object is accounted for, not the memory consumption of objects it refers to")
+
 I assume as for now that the dict can grow as big as it needs, the python interpreter or the python memory manager take care of it (citation needs)
 
 
