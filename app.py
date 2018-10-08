@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 import sys
 import argparse
@@ -6,35 +6,35 @@ import pendulum
 import re
 
 
-
 def readlog(args):
     # print(args, from_to_timestamp, end_to_timestamp)
     stats=[]
     if args.from_date is None:
-        from_date = "1970-01-01T00:00:00"
+        args.from_date = "1970-01-01T00:00:00"
     if args.to_date is None:
-        to_date = "2070-01-01T00:00:00"
+        args.to_date = "2070-01-01T00:00:00"
     if args.lazy is False:
         check_date = re.compile("\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}")
         if check_date.match(args.from_date) is not None:
             from_timestamp = pendulum.parse(args.from_date, strict=True).int_timestamp
-            from_date = pendulum.parse(args.from_date, strict=True).to_iso8601_string
+            from_date = pendulum.parse(args.from_date, strict=True).to_iso8601_string()
         else:
-            print("Starting date must be in ISO8601 format (YYYY-MM-DDThh:mm:ss)")
+            print("Starting date must be in ISO8601 format (YYYY-MM-DDThh:mm:ss) or use '--lazy' argument")
             sys.exit()
         if check_date.match(args.to_date) is not None:
             to_timestamp = pendulum.parse(args.to_date, strict=True).int_timestamp
-            to_date = pendulum.parse(args.to_date, strict=True).to_iso8601_string
+            to_date = pendulum.parse(args.to_date, strict=True).to_iso8601_string()
         else:
-            print("Ending date must be in ISO8601 format (YYYY-MM-DDThh:mm:ss)")
+            print("Ending date must be in ISO8601 format (YYYY-MM-DDThh:mm:ss) or use '--lazy' argument")
+            sys.exit()
     else:
         try:
             from_timestamp = pendulum.parse(args.from_date, strict=False).int_timestamp
-            from_date = pendulum.parse(args.from_date, strict=False).to_iso8601_string
+            from_date = pendulum.parse(args.from_date, strict=False).to_iso8601_string()
             to_timestamp = pendulum.parse(args.to_date, strict=False).int_timestamp
-            to_date = pendulum.parse(args.to_date, strict=False).to_iso8601_string
+            to_date = pendulum.parse(args.to_date, strict=False).to_iso8601_string()
         except pendulum.parsing.exceptions.ParserError:
-            print("Cannot parse the date, try without the 'lazy' argument")
+            print("Cannot parse the date, try without the '--lazy' argument")
     if from_timestamp > to_timestamp:
         print("Starting date cannot be later than ending date. Maybe you confused '--from' and '--to'")
     for logfile in args.file:
@@ -109,8 +109,8 @@ def create_stat(stats):
 def get_stat():
     parser = argparse.ArgumentParser(prog="logstat", description="generates statistics out of log files in a given timeframe")
     parser.add_argument("file", type=argparse.FileType('r'), nargs='+', help="file or files contain the logs")
-    parser.add_argument("--from", dest="from_date", help="starting date in ISO8601 format (YYYY-MM-DDThh:mm:ss)")
-    parser.add_argument("--to", dest="to_date", help="ending date in ISO8601 format (YYYY-MM-DDThh:mm:ss)")
+    parser.add_argument("--from", "-f", dest="from_date", help="starting date in ISO8601 format (YYYY-MM-DDThh:mm:ss)")
+    parser.add_argument("--to", "-t", dest="to_date", help="ending date in ISO8601 format (YYYY-MM-DDThh:mm:ss)")
     parser.add_argument("--lazy", "-l", dest="lazy", action="store_true", help="lazy mode - you can input only partial date (for example: '1975-12-25'), or you can change the format (for example: '25-Dec-1975 14:15:16' instead of '1975-12-25T14:15:16'), pendulum is going to try to parse it.")
     args = parser.parse_args()
     stats = readlog(args)
