@@ -47,3 +47,13 @@ Then activate it:
   source venv/bin/activate
 Then install the required packages:
   pip install -r requirements.txt
+
+
+Assumptions: (version 1)
+
+-This tool assuming that running environment has python3, pip3, virtualenv installed
+-This tool assuming that user can install python3 packages via pip
+-This tool assuming that the computer has at least few GB of free memory, because it is possible
+to feed multiple log files into the app, and each each file's size can amount for several GB of content.(Especially if the user omit the '--from' and '--to' arguments, because 
+the entire content of the files will be read into the 'stat' dictionary.
+ 
