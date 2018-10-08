@@ -12,10 +12,8 @@ def readlog(args):
     stats=[]
     if args.from_date is None:
         args.from_date = "1970-01-01T00:00:00"
-        from_timestamp_set = False
     if args.to_date is None:
         args.to_date = "2070-01-01T00:00:00"
-        to_timestamp_set = False
     if args.lazy is False:
         check_date = re.compile("\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}")
         if check_date.match(args.from_date) is not None:
@@ -40,10 +38,7 @@ def readlog(args):
             for line in f:
                 arr = line.split(",")
                 timestamp = arr[0]
-                if from_timestamp_set == False:
-                    from_timestamp = timestamp
-                    from_timestamp_set = True
-                if int(timestamp) >= from_timestamp and int(timestamp) <= to_timestamp:
+                if int(timestamp) >= int(from_timestamp) and int(timestamp) <= int(to_timestamp):
                     found={}
                     found["timestamp"] = timestamp
                     found["http_host"] = arr[1]
@@ -53,9 +48,6 @@ def readlog(args):
                     found["body_size"] = arr[5]
                     found["ip_address"] = arr[6]
                     stats.append(found)
-            if to_timestamp_set == False:
-                to_timestamp = timestamp
-                to_timestamp_set = True        
     return stats
 
 
@@ -86,7 +78,7 @@ def create_stat(stats):
             elif status_5xx.match(item["http_status"]) is not None:
                 tools_sum_5xx+=1
     result={}
-    allitem=len(stat)
+    allitem=len(stats)
     def calc_percent(divi, multi):
         percent=0
         try:
@@ -116,7 +108,10 @@ def get_stat():
     parser.add_argument("--lazy", "-l", dest="lazy", action="store_true", help="lazy mode - you can input only partial date (for example: '1975-12-25'), or you can change the format (for example: '25-Dec-1975 14:15:16' instead of '1975-12-25T14:15:16'), pendulum is going to try to parse it.")
     args = parser.parse_args()
     stats = readlog(args)
-    # print(stat)
+    from_date = stats[0]["timestamp"]
+    # print(from_date)
+    to_date = stats[len(stats)-1]["timestamp"]
+    # print(to_date)
     result = create_stat(stats)
     # print(result)
     print("""
@@ -131,7 +126,7 @@ def get_stat():
         {}% of 3xx
         {}% of 4xx
         {}% of 5xx
-    """.format(args.from_date, args.to_date, 
+    """.format(from_date, to_date, 
     result["api"]["2xx"],result["api"]["3xx"],result["api"]["4xx"],result["api"]["5xx"],
     result["tools"]["2xx"],result["tools"]["3xx"],result["tools"]["4xx"],result["tools"]["5xx"]))
 
