@@ -11,24 +11,28 @@ def readlog(args):
     # print(args, from_to_timestamp, end_to_timestamp)
     stats=[]
     if args.from_date is None:
-        args.from_date = "1970-01-01T00:00:00"
+        from_date = "1970-01-01T00:00:00"
     if args.to_date is None:
-        args.to_date = "2070-01-01T00:00:00"
+        to_date = "2070-01-01T00:00:00"
     if args.lazy is False:
         check_date = re.compile("\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}")
         if check_date.match(args.from_date) is not None:
             from_timestamp = pendulum.parse(args.from_date, strict=True).int_timestamp
+            from_date = pendulum.parse(args.from_date, strict=True).to_iso8601_string
         else:
             print("Starting date must be in ISO8601 format (YYYY-MM-DDThh:mm:ss)")
             sys.exit()
         if check_date.match(args.to_date) is not None:
             to_timestamp = pendulum.parse(args.to_date, strict=True).int_timestamp
+            to_date = pendulum.parse(args.to_date, strict=True).to_iso8601_string
         else:
             print("Ending date must be in ISO8601 format (YYYY-MM-DDThh:mm:ss)")
     else:
         try:
             from_timestamp = pendulum.parse(args.from_date, strict=False).int_timestamp
+            from_date = pendulum.parse(args.from_date, strict=False).to_iso8601_string
             to_timestamp = pendulum.parse(args.to_date, strict=False).int_timestamp
+            to_date = pendulum.parse(args.to_date, strict=False).to_iso8601_string
         except pendulum.parsing.exceptions.ParserError:
             print("Cannot parse the date, try without the 'lazy' argument")
     if from_timestamp > to_timestamp:
@@ -40,6 +44,8 @@ def readlog(args):
                 timestamp = arr[0]
                 if int(timestamp) >= int(from_timestamp) and int(timestamp) <= int(to_timestamp):
                     found={}
+                    found["from_date"] = from_date
+                    found["to_date"] = to_date
                     found["timestamp"] = timestamp
                     found["http_host"] = arr[1]
                     found["http_method"] = arr[2]
@@ -108,9 +114,9 @@ def get_stat():
     parser.add_argument("--lazy", "-l", dest="lazy", action="store_true", help="lazy mode - you can input only partial date (for example: '1975-12-25'), or you can change the format (for example: '25-Dec-1975 14:15:16' instead of '1975-12-25T14:15:16'), pendulum is going to try to parse it.")
     args = parser.parse_args()
     stats = readlog(args)
-    from_date = stats[0]["timestamp"]
+    from_date = stats[0]["from_date"]
     # print(from_date)
-    to_date = stats[len(stats)-1]["timestamp"]
+    to_date = stats[len(stats)-1]["to_date"]
     # print(to_date)
     result = create_stat(stats)
     # print(result)
