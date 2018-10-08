@@ -42,9 +42,9 @@ def create_stat(stat):
             elif status_3xx.match(item["http_status"]) is not None:
                 api_sum_3xx+=1
             elif status_4xx.match(item["http_status"]) is not None:
-                api_sum_4xx=1
+                api_sum_4xx+=1
             elif status_5xx.match(item["http_status"]) is not None:
-                api_sum_5xx=1
+                api_sum_5xx+=1
         elif item["http_host"] == "tools":
             if status_2xx.match(item["http_status"]) is not None:
                 tools_sum_2xx+=1
