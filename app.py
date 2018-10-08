@@ -19,13 +19,13 @@ def readlog(args):
             from_timestamp = pendulum.parse(args.from_date, strict=True).int_timestamp
             from_date = pendulum.parse(args.from_date, strict=True).to_iso8601_string()
         else:
-            print("Starting date must be in ISO8601 format (YYYY-MM-DDThh:mm:ss) or use '--lazy' argument")
+            print("Starting date must be in ISO 8601 format (YYYY-MM-DDThh:mm:ss) or use '--lazy' argument")
             sys.exit()
         if check_date.match(args.to_date) is not None:
             to_timestamp = pendulum.parse(args.to_date, strict=True).int_timestamp
             to_date = pendulum.parse(args.to_date, strict=True).to_iso8601_string()
         else:
-            print("Ending date must be in ISO8601 format (YYYY-MM-DDThh:mm:ss) or use '--lazy' argument")
+            print("Ending date must be in ISO 8601 format (YYYY-MM-DDThh:mm:ss) or use '--lazy' argument")
             sys.exit()
     else:
         try:
@@ -107,7 +107,7 @@ def create_stat(stats):
 
 
 def get_stat():
-    parser = argparse.ArgumentParser(prog="logstat", description="generates statistics out of log files in a given timeframe")
+    parser = argparse.ArgumentParser(prog="app.py", description="generates statistics out of log files in a given timeframe")
     parser.add_argument("file", type=argparse.FileType('r'), nargs='+', help="file or files contain the logs")
     parser.add_argument("--from", "-f", dest="from_date", help="starting date in ISO8601 format (YYYY-MM-DDThh:mm:ss)")
     parser.add_argument("--to", "-t", dest="to_date", help="ending date in ISO8601 format (YYYY-MM-DDThh:mm:ss)")

@@ -1,22 +1,29 @@
-usage: logstat [-h] [--from FROM_DATE] [--to TO_DATE] [--lazy] file [file ...]
+usage: app.py [-h] [--from FROM_DATE] [--to TO_DATE] [--lazy] file [file ...]
 
 generates statistics out of log files in a given timeframe
 
 positional arguments:
-  file              file or files contain the logs
+  file                  file or files contain the logs
 
 optional arguments:
-  -h, --help        show this help message and exit
-  --from FROM_DATE  starting date in ISO8601 format (YYYY-MM-DDThh:mm:ss)
-  --to TO_DATE      ending date in ISO8601 format (YYYY-MM-DDThh:mm:ss)
-  --lazy, -l        lazy mode - you can omit everything except year
+  -h, --help            show this help message and exit
+  --from FROM_DATE, -f FROM_DATE
+                        starting date in ISO8601 format (YYYY-MM-DDThh:mm:ss)
+  --to TO_DATE, -t TO_DATE
+                        ending date in ISO8601 format (YYYY-MM-DDThh:mm:ss)
+  --lazy, -l            lazy mode - you can input only partial date (for
+                        example: '1975-12-25'), or you can change the format
+                        (for example: '25-Dec-1975 14:15:16' instead of
+                        '1975-12-25T14:15:16'), pendulum is going to try to
+                        parse it.
+
 
 
 Example run:
 
-python app.py ../sample-logs.txt 
+./app.py ../sample-logs.* --from '25-Dec-1975 14:15:16' --to 2200 --lazy
 
-    Betweeen time 1970-01-01T00:00:00 and 2070-01-01T00:00:00:
+    Betweeen time 1975-12-25T14:15:16Z and 2200-01-01T00:00:00Z:
     Response rates for "api":
         25.97% of 2xx
         0.0% of 3xx
@@ -28,7 +35,8 @@ python app.py ../sample-logs.txt
         0.52% of 4xx
         4.42% of 5xx
 
-====================================================
+
+
 Build:
 
 This tool is using pendulum (https://pendulum.eustace.io/) to parsing time intervals.
