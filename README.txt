@@ -106,12 +106,28 @@ wc -l test-log2.txt
 385000 test-log2.txt <-- 385000 lines
 
 measuring the execution time:
-time ./app.py ../test-log2.txt <-- feed the whole file into the app
-real	0m1,152s <-- approximately 1 sec
+time ./app.py ../test-log2.txt <-- feed all 385000 lines into the app
 
-179M log file with 3850000 lines:
+    Betweeen time 1970-01-01T00:00:00Z and 2070-01-01T00:00:00Z:
+    Response rates for "api":
+        25.97% of 2xx
+        0.0% of 3xx
+        0.0% of 4xx
+        0.26% of 5xx
+    Response rates for "tools":
+        60.26% of 2xx
+        8.57% of 3xx
+        0.52% of 4xx
+        4.42% of 5xx
+    
+
+real	0m2,072s <-- approximately 1 sec
+user	0m0,902s
+sys	0m0,131s
+
+
+179M file with 3850000 lines:
 --------------
-for i in {1..10000}; do cat sample-logs.txt >> test-log3.txt; done
 ls -lh test-log3.txt 
 -rw-r--r-- 1 roka roka 179M okt    9 14.50 test-log3.txt
 wc -l test-log3.txt 
@@ -119,10 +135,10 @@ wc -l test-log3.txt
 time ./app.py ../test-log3.txt 
 real	0m7,663s
 
-1.8G log file with 38500000 lines:
+
+1.8G file with 38500000 lines:
 I had to interrupt it, it kept running even after 78 minutes
 -------------
-time for i in {1..100000}; do cat sample-logs.txt >> test-log4.txt; done
 ls -lh test-log4.txt 
 -rw-r--r-- 1 roka roka 1,8G okt    9 15.00 test-log4.txt
 wc -l test-log4.txt 
