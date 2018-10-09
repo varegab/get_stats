@@ -90,3 +90,63 @@ Generally:
 -This tool assuming that running environment has python3, pip3, virtualenv installed
 -This tool assuming that user can install python3 packages via pip
 -I assume as for now that the dict can grow as big as it needs, the python interpreter or the python memory manager take care of it (citation needed)
+
+
+========================================================
+TESTING CASE 1:
+configuration: intel i7 with 16G ram
+
+created a 18M log with 385000 lines from the sample:
+-------------
+for i in {1..1000}; do cat sample-logs.txt >> test-log2.txt; done
+ls -lh test-log2.txt 
+-rw-r--r-- 1 roka roka 18M okt    9 14.44 test-log2.txt <-- 18MB
+
+wc -l test-log2.txt 
+385000 test-log2.txt <-- 385000 lines
+
+measuring the execution time:
+time ./app.py ../test-log2.txt <-- feed the whole file into the app
+real	0m1,152s <-- approximately 1 sec
+
+179M log file with 3850000 lines:
+--------------
+for i in {1..10000}; do cat sample-logs.txt >> test-log3.txt; done
+ls -lh test-log3.txt 
+-rw-r--r-- 1 roka roka 179M okt    9 14.50 test-log3.txt
+wc -l test-log3.txt 
+3850000 test-log3.txt
+time ./app.py ../test-log3.txt 
+real	0m7,663s
+
+1.8G log file with 38500000 lines:
+I had to interrupt it, it kept running even after 78 minutes
+-------------
+time for i in {1..100000}; do cat sample-logs.txt >> test-log4.txt; done
+ls -lh test-log4.txt 
+-rw-r--r-- 1 roka roka 1,8G okt    9 15.00 test-log4.txt
+wc -l test-log4.txt 
+38500000 test-log4.txt
+time ./app.py ../test-log4.txt
+^C^C^C^C^C^C^C^C^C^C^C^C^C
+
+^C^C^C^C^C^C^C^C^C^C^CTraceback (most recent call last):
+  File "./app.py", line 143, in <module>
+    get_stat()
+  File "./app.py", line 123, in get_stat
+    result = create_stat(alldata["stats"])
+  File "./app.py", line 72, in create_stat
+    if item["http_host"] == "api":
+KeyboardInterrupt
+
+^C
+
+real	78m34,679s
+user	2m42,194s
+sys	3m7,862s
+
+
+
+
+
+
