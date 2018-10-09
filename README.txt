@@ -20,9 +20,8 @@ optional arguments:
 
   TODO: testing, testing, and testing to eliminate remining BUGS !!!
   TODO: timestamp 'reverse' functionality, which converts the timestamps taken from the file(s) into ISO8601 format. 
-  TODO: creating stand-alone app from the tool with PyInstaller(?) 
 
-
+===============================================
 Example runs:
 
 ./app.py ../sample-logs.txt --from 2018-07-31T00:00:00Z --to 2018-08-02T00:00:00Z
@@ -69,7 +68,7 @@ Example runs:
         0.52% of 4xx
         4.42% of 5xx
 
-
+===============================================
 Build:
 
 This tool is using pendulum (https://pendulum.eustace.io/) to parsing time intervals.
@@ -81,7 +80,13 @@ Then activate it:
 Then install the required packages:
   pip install -r requirements.txt
 
+To build a stand-alone executable, first install PyInstaller:
+    pip install pyinstaller
+Then use the following command:
+    pyinstaller --add-data="venv/lib/python*/site-packages/pendulum:pendulum" -F app.py
+You will find the stand-alone executable in the 'dist' folder.
 
+===============================================
 Assumptions:
 
 -This tool tested with python 3.7.0 under Manjaro linux. 
@@ -93,8 +98,7 @@ Generally:
 -I do not assume the size and the amount of the input files by any means, it can process
 them (please check TESTING PERFORMANCE CASE 2) 
 
-
-========================================================
+===============================================
 TESTING PERFORMANCE CASE 2:
 (Refactored the code to not using dictionary, just incerasing counters while iterating through the file.)
 configuration: intel i7 with 16G ram
