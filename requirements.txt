@@ -1,9 +1,4 @@
-altgraph==0.16.1
-future==0.16.0
-macholib==1.11
-pefile==2018.8.8
 pendulum==2.0.3
-PyInstaller==3.4
 python-dateutil==2.7.3
 pytzdata==2018.5
 six==1.11.0
