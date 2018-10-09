@@ -93,7 +93,7 @@ Generally:
 
 ========================================================
 TESTING PERFORMANCE CASE 2:
-(Refactored the code to no using dictionary, just incerasing counters while interating through the file.)
+(Refactored the code to not using dictionary, just incerasing counters while iterating through the file.)
 configuration: intel i7 with 16G ram
 
 18M file with 385000 lines:
