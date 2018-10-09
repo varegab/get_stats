@@ -6,9 +6,13 @@ import pendulum
 import re
 
 
-def readlog(args):
-    # print(args, from_to_timestamp, end_to_timestamp)
-    stats=[]
+def get_stat():
+    parser = argparse.ArgumentParser(prog="app.py", description="generates statistics out of log files in a given timeframe")
+    parser.add_argument("file", type=argparse.FileType('r'), nargs='+', help="file or files contain the logs")
+    parser.add_argument("--from", "-f", dest="from_date", help="starting date in ISO8601 format (YYYY-MM-DDThh:mm:ss)")
+    parser.add_argument("--to", "-t", dest="to_date", help="ending date in ISO8601 format (YYYY-MM-DDThh:mm:ss)")
+    parser.add_argument("--lazy", "-l", dest="lazy", action="store_true", help="lazy mode - you can input only partial date (for example: '1975-12-25'), or you can change the format (for example: '25-Dec-1975 14:15:16' instead of '1975-12-25T14:15:16'), pendulum is going to try to parse it.")
+    args = parser.parse_args()
     if args.from_date is None:
         args.from_date = "1970-01-01T00:00:00"
     if args.to_date is None:
@@ -39,63 +43,48 @@ def readlog(args):
     if from_timestamp > to_timestamp:
         print("Starting date cannot be later than ending date. Maybe you confused '--from' and '--to'")
         sys.exit()
-    for logfile in args.file:
-        with open(logfile.name, 'r') as f:
-            for line in f:
-                arr = line.split(",")
-                timestamp = arr[0]
-                if int(timestamp) >= int(from_timestamp) and int(timestamp) <= int(to_timestamp):
-                    found={}
-                    found["timestamp"] = timestamp
-                    found["http_host"] = arr[1]
-                    found["http_method"] = arr[2]
-                    found["http_status"] = arr[3]
-                    found["duration"] = arr[4]
-                    found["body_size"] = arr[5]
-                    found["ip_address"] = arr[6]
-                    stats.append(found)
-    alldata = {}
-    alldata["from_date"] = from_date
-    alldata["to_date"] = to_date
-    alldata["stats"] = stats
-    return alldata
-
-
-def create_stat(stats):
     status_2xx = re.compile("2..")
     status_3xx = re.compile("3..")
     status_4xx = re.compile("4..")
     status_5xx = re.compile("5..")
     api_sum_2xx, api_sum_3xx, api_sum_4xx, api_sum_5xx = 0,0,0,0
     tools_sum_2xx, tools_sum_3xx, tools_sum_4xx, tools_sum_5xx = 0,0,0,0
-    for item in stats:
-        if item["http_host"] == "api":
-            if status_2xx.match(item["http_status"]) is not None:
-                api_sum_2xx+=1
-            elif status_3xx.match(item["http_status"]) is not None:
-                api_sum_3xx+=1
-            elif status_4xx.match(item["http_status"]) is not None:
-                api_sum_4xx+=1
-            elif status_5xx.match(item["http_status"]) is not None:
-                api_sum_5xx+=1
-        elif item["http_host"] == "tools":
-            if status_2xx.match(item["http_status"]) is not None:
-                tools_sum_2xx+=1
-            elif status_3xx.match(item["http_status"]) is not None:
-                tools_sum_3xx+=1
-            elif status_4xx.match(item["http_status"]) is not None:
-                tools_sum_4xx+=1
-            elif status_5xx.match(item["http_status"]) is not None:
-                tools_sum_5xx+=1
-    result={}
-    allitem=len(stats)
+    allitem = 0
+    for logfile in args.file:
+        with open(logfile.name, 'r') as f:
+            for line in f:
+                arr = line.split(",")
+                timestamp = arr[0]
+                if int(timestamp) >= int(from_timestamp) and int(timestamp) <= int(to_timestamp):
+                    http_host = arr[1]
+                    http_status = arr[3]
+                    if http_host == "api":
+                        if status_2xx.match(http_status) is not None:
+                            api_sum_2xx+=1
+                        elif status_3xx.match(http_status) is not None:
+                            api_sum_3xx+=1
+                        elif status_4xx.match(http_status) is not None:
+                            api_sum_4xx+=1
+                        elif status_5xx.match(http_status) is not None:
+                            api_sum_5xx+=1
+                    elif http_host == "tools":
+                        if status_2xx.match(http_status) is not None:
+                            tools_sum_2xx+=1
+                        elif status_3xx.match(http_status) is not None:
+                            tools_sum_3xx+=1
+                        elif status_4xx.match(http_status) is not None:
+                            tools_sum_4xx+=1
+                        elif status_5xx.match(http_status) is not None:
+                            tools_sum_5xx+=1
+                    allitem+=1
     def calc_percent(divi, multi):
         percent=0
         try:
             percent = 100/divi*multi
         except ZeroDivisionError:
             return 0
-        return round(percent, 2)   
+        return round(percent, 2)
+    result={}
     result["api"] = {}
     result["api"]["2xx"] = calc_percent(allitem, api_sum_2xx)
     result["api"]["3xx"] = calc_percent(allitem, api_sum_3xx)
@@ -106,22 +95,7 @@ def create_stat(stats):
     result["tools"]["3xx"] = calc_percent(allitem, tools_sum_3xx)
     result["tools"]["4xx"] = calc_percent(allitem, tools_sum_4xx)
     result["tools"]["5xx"] = calc_percent(allitem, tools_sum_5xx)
-    # print(result)
-    return result
-
-
-def get_stat():
-    parser = argparse.ArgumentParser(prog="app.py", description="generates statistics out of log files in a given timeframe")
-    parser.add_argument("file", type=argparse.FileType('r'), nargs='+', help="file or files contain the logs")
-    parser.add_argument("--from", "-f", dest="from_date", help="starting date in ISO8601 format (YYYY-MM-DDThh:mm:ss)")
-    parser.add_argument("--to", "-t", dest="to_date", help="ending date in ISO8601 format (YYYY-MM-DDThh:mm:ss)")
-    parser.add_argument("--lazy", "-l", dest="lazy", action="store_true", help="lazy mode - you can input only partial date (for example: '1975-12-25'), or you can change the format (for example: '25-Dec-1975 14:15:16' instead of '1975-12-25T14:15:16'), pendulum is going to try to parse it.")
-    args = parser.parse_args()
-    alldata = readlog(args)
-    from_date = alldata["from_date"]
-    to_date = alldata["to_date"]
-    result = create_stat(alldata["stats"])
-    # print(result)
+    print(result)
     print("""
     Betweeen time {} and {}:
     Response rates for "api":
