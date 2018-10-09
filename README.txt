@@ -95,7 +95,7 @@ Generally:
 -This tool assuming that running environment has python3, pip3, virtualenv installed
 -This tool assuming that user can install python3 packages via pip
 
--I do not assume the size and the amount of the input files by any means, it can process
+-I DO NOT assume the size and the amount of the input files by any means, it can process
 them (please check TESTING PERFORMANCE CASE 2) 
 
 ===============================================
