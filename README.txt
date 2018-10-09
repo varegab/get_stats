@@ -22,7 +22,7 @@ optional arguments:
   TODO: creating stand-alone app from the tool with PyInstaller(?) 
 
 
-Example run:
+Example runs:
 
 ./app.py ../sample-logs.txt --from 2018-07-31T00:00:00Z --to 2018-08-02T00:00:00Z
 
@@ -52,6 +52,21 @@ Example run:
         8.75% of 3xx
         0.42% of 4xx
         2.92% of 5xx
+
+
+./app.py ../sample-logs.txt
+
+    Betweeen time 1970-01-01T00:00:00Z and 2070-01-01T00:00:00Z:
+    Response rates for "api":
+        25.97% of 2xx
+        0.0% of 3xx
+        0.0% of 4xx
+        0.26% of 5xx
+    Response rates for "tools":
+        60.26% of 2xx
+        8.57% of 3xx
+        0.52% of 4xx
+        4.42% of 5xx
 
 
 Build:
