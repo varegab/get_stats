@@ -121,9 +121,9 @@ time ./app.py ../test-log2.txt <-- feed all 385000 lines into the app
         4.42% of 5xx
     
 
-real	0m2,072s <-- approximately 1 sec
-user	0m0,902s
-sys	0m0,131s
+real	0m0,826s <-- approximately 1 second
+user	0m0,756s
+sys	0m0,070s
 
 
 179M file with 3850000 lines:
