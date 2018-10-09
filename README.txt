@@ -89,10 +89,48 @@ I do not know howto setup python environment under windows or mac, but I assume 
 Generally:
 -This tool assuming that running environment has python3, pip3, virtualenv installed
 -This tool assuming that user can install python3 packages via pip
--I assume as for now that the dict can grow as big as it needs, the python interpreter or the python memory manager take care of it (citation needed)
 
 
 ========================================================
+TESTING PERFORMANCE CASE 2:
+(Refactored the code to no using dictionary, just incerasing counters while interating through the file.)
+configuration: intel i7 with 16G ram
+
+18M file with 385000 lines:
+-------------
+time ./app.py ../test-log2.txt
+
+    Betweeen time 1970-01-01T00:00:00Z and 2070-01-01T00:00:00Z:
+    Response rates for "api":
+        25.97% of 2xx
+        0.0% of 3xx
+        0.0% of 4xx
+        0.26% of 5xx
+    Response rates for "tools":
+        60.26% of 2xx
+        8.57% of 3xx
+        0.52% of 4xx
+        4.42% of 5xx
+    
+
+real	0m0,527s
+user	0m0,517s
+sys	0m0,010s
+
+
+179M file with 3850000 lines:
+--------------
+time ./app.py ../test-log3.txt
+real	0m4,701s
+
+
+1.8G file with 38500000 lines:
+--------------
+time ./app.py ../test-log4.txt
+real	0m55,240s
+
+
+
 TESTING PERFORMANCE CASE 1:
 configuration: intel i7 with 16G ram
 
@@ -137,7 +175,8 @@ real	0m7,663s
 
 
 1.8G file with 38500000 lines:
-I had to interrupt it, it kept running even after 78 minutes
+I had to interrupt it, it kept running even after 78 minutes, and it rendererd my computer unusable
+Read 1.8G into a dict is not a good approach by any means.
 TODO: Refactor the code to incerase performance.
 -------------
 ls -lh test-log4.txt 
@@ -162,43 +201,6 @@ real	78m34,679s
 user	2m42,194s
 sys	3m7,862s
 
-
-TESTING PERFORMANCE CASE 2:
-(Refactored the code to no using dictionary, just incerasing counters while interating through the file.)
-configuration: intel i7 with 16G ram
-
-18M file with 385000 lines:
--------------
-time ./app.py ../test-log2.txt
-
-    Betweeen time 1970-01-01T00:00:00Z and 2070-01-01T00:00:00Z:
-    Response rates for "api":
-        25.97% of 2xx
-        0.0% of 3xx
-        0.0% of 4xx
-        0.26% of 5xx
-    Response rates for "tools":
-        60.26% of 2xx
-        8.57% of 3xx
-        0.52% of 4xx
-        4.42% of 5xx
-    
-
-real	0m0,527s
-user	0m0,517s
-sys	0m0,010s
-
-
-179M file with 3850000 lines:
---------------
-time ./app.py ../test-log3.txt
-real	0m4,701s
-
-
-1.8G file with 38500000 lines:
---------------
-time ./app.py ../test-log4.txt
-real	0m55,240s
 
 
 
