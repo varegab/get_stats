@@ -35,8 +35,10 @@ def readlog(args):
             to_date = pendulum.parse(args.to_date, strict=False).to_iso8601_string()
         except pendulum.parsing.exceptions.ParserError:
             print("Cannot parse the date, try without the '--lazy' argument")
+            sys.exit()
     if from_timestamp > to_timestamp:
         print("Starting date cannot be later than ending date. Maybe you confused '--from' and '--to'")
+        sys.exit()
     for logfile in args.file:
         with open(logfile.name, 'r') as f:
             for line in f:
@@ -44,8 +46,6 @@ def readlog(args):
                 timestamp = arr[0]
                 if int(timestamp) >= int(from_timestamp) and int(timestamp) <= int(to_timestamp):
                     found={}
-                    found["from_date"] = from_date
-                    found["to_date"] = to_date
                     found["timestamp"] = timestamp
                     found["http_host"] = arr[1]
                     found["http_method"] = arr[2]
@@ -54,7 +54,11 @@ def readlog(args):
                     found["body_size"] = arr[5]
                     found["ip_address"] = arr[6]
                     stats.append(found)
-    return stats
+    alldata = {}
+    alldata["from_date"] = from_date
+    alldata["to_date"] = to_date
+    alldata["stats"] = stats
+    return alldata
 
 
 def create_stat(stats):
@@ -113,12 +117,10 @@ def get_stat():
     parser.add_argument("--to", "-t", dest="to_date", help="ending date in ISO8601 format (YYYY-MM-DDThh:mm:ss)")
     parser.add_argument("--lazy", "-l", dest="lazy", action="store_true", help="lazy mode - you can input only partial date (for example: '1975-12-25'), or you can change the format (for example: '25-Dec-1975 14:15:16' instead of '1975-12-25T14:15:16'), pendulum is going to try to parse it.")
     args = parser.parse_args()
-    stats = readlog(args)
-    from_date = stats[0]["from_date"]
-    # print(from_date)
-    to_date = stats[len(stats)-1]["to_date"]
-    # print(to_date)
-    result = create_stat(stats)
+    alldata = readlog(args)
+    from_date = alldata["from_date"]
+    to_date = alldata["to_date"]
+    result = create_stat(alldata["stats"])
     # print(result)
     print("""
     Betweeen time {} and {}:

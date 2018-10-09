@@ -24,9 +24,9 @@ optional arguments:
 
 Example run:
 
-./app.py ../sample-logs.* --from '25-Dec-1975 14:15:16' --to 2200 --lazy
+./app.py ../sample-logs.txt --from 2018-7 --to 2018-8 --lazy
 
-    Betweeen time 1975-12-25T14:15:16Z and 2200-01-01T00:00:00Z:
+    Betweeen time 2018-07-09T00:00:00Z and 2018-08-09T00:00:00Z:
     Response rates for "api":
         25.97% of 2xx
         0.0% of 3xx
@@ -37,7 +37,6 @@ Example run:
         8.57% of 3xx
         0.52% of 4xx
         4.42% of 5xx
-
 
 
 Build:
@@ -52,19 +51,11 @@ Then install the required packages:
   pip install -r requirements.txt
 
 
-Assumptions: (version 1)
+Assumptions:
 
 -This tool tested with python 3.7.0 under Manjaro linux. 
 I do not know howto setup python environment under windows or mac, but I assume that it is possible to create the same environment.
 Generally:
 -This tool assuming that running environment has python3, pip3, virtualenv installed
 -This tool assuming that user can install python3 packages via pip
--This tool assuming that the computer has at least few GB of free memory, because it is possible
-to feed multiple log files into the app, and each file can hold several GB of content. (Especially if the user omits the '--from' and '--to' arguments, because 
-the entire content of the files will be read into the 'stat' dictionary by line after line.
-TODO: measure the size of the 'stat' with a few million entries...? (The problem is with
-sys.getsizeof(object[, default]) is: "only the memory consumption directly attributed to the object is accounted for, not the memory consumption of objects it refers to")
-
-I assume as for now that the dict can grow as big as it needs, the python interpreter or the python memory manager take care of it (citation needs)
-
-
+-I assume as for now that the dict can grow as big as it needs, the python interpreter or the python memory manager take care of it (citation needs)
