@@ -95,7 +95,7 @@ def get_stat():
     result["tools"]["3xx"] = calc_percent(allitem, tools_sum_3xx)
     result["tools"]["4xx"] = calc_percent(allitem, tools_sum_4xx)
     result["tools"]["5xx"] = calc_percent(allitem, tools_sum_5xx)
-    print(result)
+    # print(result)
     print("""
     Betweeen time {} and {}:
     Response rates for "api":

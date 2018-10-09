@@ -93,7 +93,7 @@ Generally:
 
 
 ========================================================
-TESTING CASE 1:
+TESTING PERFORMANCE CASE 1:
 configuration: intel i7 with 16G ram
 
 created a 18M log with 385000 lines from the sample:
@@ -163,6 +163,42 @@ user	2m42,194s
 sys	3m7,862s
 
 
+TESTING PERFORMANCE CASE 2:
+(Refactored the code to no using dictionary, just incerasing counters while interating through the file.)
+configuration: intel i7 with 16G ram
+
+18M file with 385000 lines:
+-------------
+time ./app.py ../test-log2.txt
+
+    Betweeen time 1970-01-01T00:00:00Z and 2070-01-01T00:00:00Z:
+    Response rates for "api":
+        25.97% of 2xx
+        0.0% of 3xx
+        0.0% of 4xx
+        0.26% of 5xx
+    Response rates for "tools":
+        60.26% of 2xx
+        8.57% of 3xx
+        0.52% of 4xx
+        4.42% of 5xx
+    
+
+real	0m0,527s
+user	0m0,517s
+sys	0m0,010s
+
+
+179M file with 3850000 lines:
+--------------
+time ./app.py ../test-log3.txt
+real	0m4,701s
+
+
+1.8G file with 38500000 lines:
+--------------
+time ./app.py ../test-log4.txt
+real	0m55,240s
 
 
 
