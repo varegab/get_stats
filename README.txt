@@ -18,6 +18,7 @@ optional arguments:
                         parse it.
                         
 
+  TODO: testing, testing, and testing to eliminate remining BUGS !!!
   TODO: timestamp 'reverse' functionality, which converts the timestamps taken from the file(s) into ISO8601 format. 
   TODO: creating stand-alone app from the tool with PyInstaller(?) 
 
