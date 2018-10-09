@@ -138,6 +138,7 @@ real	0m7,663s
 
 1.8G file with 38500000 lines:
 I had to interrupt it, it kept running even after 78 minutes
+TODO: Refactor the code to incerase performance.
 -------------
 ls -lh test-log4.txt 
 -rw-r--r-- 1 roka roka 1,8G okt    9 15.00 test-log4.txt
@@ -160,6 +161,7 @@ KeyboardInterrupt
 real	78m34,679s
 user	2m42,194s
 sys	3m7,862s
+
 
 
 
